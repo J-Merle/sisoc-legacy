@@ -12,5 +12,5 @@ set(SRCS
 
 add_executable(Sisoc ${SRCS})
 
-target_link_libraries(Sisoc PRIVATE Qt5::Widgets)
+target_link_libraries(Sisoc PRIVATE Qt5::Widgets ${PULSE_LDFLAGS})
 

@@ -15,6 +15,9 @@ jobs:
       with:
         version: '5.15.1'
 
+    - name: Get libpulse
+      run: sudo apt-get install libpulse-dev
+
     - uses: actions/checkout@v2
 
     - name: Create Build Environment

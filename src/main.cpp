@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "pulse/pulseaudio.h"
 #include <QApplication>
 #include <QPushButton>
  
