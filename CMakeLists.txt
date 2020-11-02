@@ -5,6 +5,12 @@ set(QT_MINIMUM_VERSION "5.15.1")
 
 find_package(Qt5Widgets ${QT_MINIMUM_VERSION} REQUIRED)
 
-add_executable(Sisoc src/main.cpp)
+set(SRCS 
+  src/main.cpp
+  src/mainwindow.cpp
+)
+
+add_executable(Sisoc ${SRCS})
 
 target_link_libraries(Sisoc PRIVATE Qt5::Widgets)
+
