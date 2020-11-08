@@ -4,6 +4,7 @@
 #endif
 
 #include <QWidget>
+#include <QSlider>
 
 class MainWindow : public QWidget {
 
@@ -12,4 +13,6 @@ class MainWindow : public QWidget {
     virtual ~MainWindow();
     void updateCard(const pa_card_info &info);
     void updateSink(const pa_sink_info &info);
+
+    std::map<uint32_t, QSlider*> sinks;
 };
