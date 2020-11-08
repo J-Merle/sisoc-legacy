@@ -1,9 +1,12 @@
-#include "mainwindow.h"
-#include <iostream>
 #include <pulse/pulseaudio.h>
 #include <pulse/glib-mainloop.h>
+
 #include <QApplication>
 #include <QPushButton>
+
+#include <iostream>
+
+#include "mainwindow.h"
 
 #define VERSION "0.1"
 
@@ -18,10 +21,9 @@ void show_error(const char *txt) {
     snprintf(buf, sizeof(buf), "%s: %s", txt, pa_strerror(pa_context_errno(context)));
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
- 
+
     MainWindow* window = new MainWindow();
     pa_glib_mainloop *m = pa_glib_mainloop_new(g_main_context_default());
     g_assert(m);
@@ -48,7 +50,6 @@ void card_cb(pa_context *, const pa_card_info *i, int eol, void *userdata) {
 
 
     w->updateCard(*i);
-
 }
 
 void sink_cb(pa_context *, const pa_sink_info *i, int eol, void *userdata) {
@@ -66,7 +67,6 @@ void sink_cb(pa_context *, const pa_sink_info *i, int eol, void *userdata) {
     }
 
     w->updateSink(*i);
-
 }
 
 void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index, void *userdata) {
@@ -74,7 +74,6 @@ void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index,
 
     // Find out which kind of event occured
     switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
-
         case PA_SUBSCRIPTION_EVENT_CARD:
             if (!(t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
                 pa_operation *o;
@@ -93,9 +92,7 @@ void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index,
             }
             pa_operation_unref(o);
           break;
-
     }
-    
 }
 
 void context_state_callback(pa_context *c, void *userdata) {

@@ -6,11 +6,10 @@
 MainWindow::MainWindow() {
   QHBoxLayout* layout = new QHBoxLayout();
   this->setLayout(layout);
-
 }
 
 
-MainWindow::~MainWindow() {};
+MainWindow::~MainWindow() {}
 
 
 void MainWindow::updateCard(const pa_card_info &info) {
@@ -25,11 +24,11 @@ void MainWindow::updateSink(const pa_sink_info &info) {
   std::cout << pa_volume_snprint(cc, 256, pa_cvolume_max(&(info.volume))) << std::endl;
   std::cout << pa_cvolume_max(&(info.volume)) << std::endl;
   QSlider* slider;
-  if(sinks.count(info.index)) {
+  if (sinks.count(info.index)) {
     slider = sinks[info.index];
   } else {
     slider = new QSlider(Qt::Vertical);
-    slider->setMaximum(PA_VOLUME_NORM*1.5);
+    slider->setMaximum(PA_VOLUME_NORM * 1.5);
     this->layout()->addWidget(slider);
     sinks[info.index] = slider;
   }

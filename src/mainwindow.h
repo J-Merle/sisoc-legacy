@@ -1,13 +1,13 @@
-#ifndef mainwindow_h
-#define mainwindow_h
+#ifndef SRC_MAINWINDOW_H_
+#define SRC_MAINWINDOW_H_
 #include <pulse/pulseaudio.h>
-#endif
+#endif  // SRC_MAINWINDOW_H_
 
+#include <map>
 #include <QWidget>
 #include <QSlider>
 
 class MainWindow : public QWidget {
-
   public:
     MainWindow();
     virtual ~MainWindow();
