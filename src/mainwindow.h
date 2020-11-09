@@ -6,6 +6,7 @@
 #include <map>
 #include <QWidget>
 #include <QSlider>
+#include "sinkwidget.h"
 
 class MainWindow : public QWidget {
   public:
@@ -14,5 +15,5 @@ class MainWindow : public QWidget {
     void updateCard(const pa_card_info &info);
     void updateSink(const pa_sink_info &info);
 
-    std::map<uint32_t, QSlider*> sinks;
+    std::map<uint32_t, SinkWidget*> sinks;
 };

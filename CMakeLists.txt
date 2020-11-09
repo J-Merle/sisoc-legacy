@@ -25,6 +25,7 @@ set(HDRS
 set(SRCS 
   src/main.cpp
   src/mainwindow.cpp
+  src/sinkwidget.cpp
 )
 
 add_executable(Sisoc ${SRCS})
