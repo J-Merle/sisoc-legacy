@@ -1,4 +1,3 @@
-#include <pulse/pulseaudio.h>
 #include <pulse/glib-mainloop.h>
 
 #include <QApplication>
@@ -178,4 +177,8 @@ gboolean connect_to_pulse(gpointer userdata) {
     }
 
     return false;
+}
+
+pa_context* get_context(void) {
+  return context;
 }

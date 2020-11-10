@@ -10,7 +10,10 @@ class SinkWidget : public QWidget {
     SinkWidget();
     virtual ~SinkWidget();
     void update(const pa_sink_info &info);
+    void updateVolumeAction(int value);
 
+    pa_cvolume volume;
+    uint32_t index;
     QSlider* mainSlider;
     QLabel* sinkName;
 };

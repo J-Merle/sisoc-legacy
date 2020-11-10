@@ -18,12 +18,8 @@ include_directories(
     ${GLIB_INCLUDE_DIRS}
 )
 
-set(HDRS
-  src/mainwindow.h
-)
-
 set(SRCS 
-  src/main.cpp
+  src/sisoc.cpp
   src/mainwindow.cpp
   src/sinkwidget.cpp
 )
