@@ -28,3 +28,15 @@ void MainWindow::updateSink(const pa_sink_info &info) {
   }
   slider->update(info);
 }
+
+void MainWindow::updateSinkInput(const pa_sink_input_info &info) {
+  for(auto it = sinks.begin(); it != sinks.end(); ++it) {
+    it->second->updateSinkInput(info);
+  }
+}
+
+void MainWindow::removeSinkInput(uint32_t index) {
+  for(auto it = sinks.begin(); it != sinks.end(); ++it) {
+    it->second->removeSinkInput(index);
+  }
+}

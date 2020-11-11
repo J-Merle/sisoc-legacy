@@ -14,6 +14,8 @@ class MainWindow : public QWidget {
     virtual ~MainWindow();
     void updateCard(const pa_card_info &info);
     void updateSink(const pa_sink_info &info);
+    void updateSinkInput(const pa_sink_input_info &info);
+    void removeSinkInput(uint32_t index);
 
     std::map<uint32_t, SinkWidget*> sinks;
 };

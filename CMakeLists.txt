@@ -18,10 +18,11 @@ include_directories(
     ${GLIB_INCLUDE_DIRS}
 )
 
-set(SRCS 
+set(SRCS
   src/sisoc.cpp
   src/mainwindow.cpp
   src/sinkwidget.cpp
+  src/sinkinputwidget.cpp
 )
 
 add_executable(Sisoc ${SRCS})
