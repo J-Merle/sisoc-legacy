@@ -16,6 +16,9 @@ class MainWindow : public QWidget {
     void updateSink(const pa_sink_info &info);
     void updateSinkInput(const pa_sink_input_info &info);
     void removeSinkInput(uint32_t index);
+    void updateClient(const pa_client_info &info);
 
     std::map<uint32_t, SinkWidget*> sinks;
+    std::map<uint32_t, SinkInputWidget*> sinkInputs;
+    std::map<uint32_t, const char*> clients;
 };

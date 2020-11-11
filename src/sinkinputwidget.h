@@ -12,11 +12,14 @@ class SinkInputWidget : public QWidget {
     virtual ~SinkInputWidget();
     void update(const pa_sink_input_info &info);
     void updateVolumeAction(int value);
+    void setTitle(const char* title);
 
     pa_cvolume volume;
     uint32_t index;
     uint32_t sink;
+    uint32_t client;
     QSlider* mainSlider;
+  private:
     QLabel* sinkInputName;
 };
 #endif  // SRC_SINKINPUTWIDGET_H_

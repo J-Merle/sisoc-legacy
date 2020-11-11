@@ -85,6 +85,26 @@ void sink_input_cb(pa_context *, const pa_sink_input_info *i, int eol, void *use
     w->updateSinkInput(*i);
 }
 
+void client_cb(pa_context *, const pa_client_info *i, int eol, void *userdata) {
+    MainWindow *w = static_cast<MainWindow*>(userdata);
+
+    if (eol < 0) {
+        if (pa_context_errno(context) == PA_ERR_NOENTITY)
+            return;
+
+        show_error(QObject::tr("client callback failure").toUtf8().constData());
+        return;
+    }
+        if (eol > 0) {
+        return;
+    }
+
+    std::cout << "Client cb" << std::endl;
+
+    std::cout << i->name << std::endl;
+    w->updateClient(*i);
+}
+
 void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index, void *userdata) {
   MainWindow *w = static_cast<MainWindow*>(userdata);
   pa_operation *o;
@@ -119,6 +139,13 @@ void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index,
         }
         pa_operation_unref(o);
       }
+      break;
+    case PA_SUBSCRIPTION_EVENT_CLIENT :
+      if (!(o = pa_context_get_client_info(c, index, client_cb, w))) {
+        show_error(QObject::tr("pa_context_get_client_info() failed").toUtf8().constData());
+        return;
+      }
+      pa_operation_unref(o);
       break;
   }
 }
@@ -171,6 +198,12 @@ void context_state_callback(pa_context *c, void *userdata) {
             if (!(o = pa_context_get_sink_input_info_list(c, sink_input_cb, w))) {
                 show_error(QObject::tr("pa_context_get_sink_input_info_list() failed").toUtf8().constData());
                 return;
+            }
+            pa_operation_unref(o);
+
+            if (!(o = pa_context_get_client_info_list(c, client_cb, w))) {
+              show_error(QObject::tr("pa_context_client_info_list() failed").toUtf8().constData());
+              return;
             }
             pa_operation_unref(o);
             break;

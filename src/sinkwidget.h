@@ -14,8 +14,9 @@ class SinkWidget : public QWidget {
     virtual ~SinkWidget();
     void update(const pa_sink_info &info);
     void updateSinkInput(const pa_sink_input_info &info);
-    void removeSinkInput(uint32_t index);
     void updateVolumeAction(int value);
+    void addSinkInput(SinkInputWidget* sinkInput);
+    void removeSinkInput(SinkInputWidget* sinkInput);
 
     pa_cvolume volume;
     uint32_t index;
@@ -23,6 +24,5 @@ class SinkWidget : public QWidget {
     QVBoxLayout* vlayout;
     QHBoxLayout* sinkInputLayout;
     QLabel* sinkName;
-    std::map<uint32_t, SinkInputWidget*> sinkInputs;
 };
 #endif  // SRC_SINKWIDGET_H_

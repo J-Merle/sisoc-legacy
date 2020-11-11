@@ -11,6 +11,7 @@ SinkInputWidget::SinkInputWidget() {
   sinkInputName = new QLabel();
   layout->addWidget(mainSlider);
   layout->addWidget(sinkInputName);
+  mainSlider->setMaximum(PA_VOLUME_NORM);
   this->setLayout(layout);
   connect(mainSlider, &QSlider::valueChanged, this, &SinkInputWidget::updateVolumeAction);
 }
@@ -18,11 +19,10 @@ SinkInputWidget::~SinkInputWidget() {}
 
 void SinkInputWidget::update(const pa_sink_input_info &info) {
   index = info.index;
+  client = info.client;
   sink = info.sink;
   volume = info.volume;
-  mainSlider->setMaximum(PA_VOLUME_NORM);
   mainSlider->setValue(pa_cvolume_max(&(info.volume)));
-  sinkInputName->setText(info.name);
 }
 
 void SinkInputWidget::updateVolumeAction(int value) {
@@ -35,4 +35,8 @@ void SinkInputWidget::updateVolumeAction(int value) {
   }
 
   pa_operation_unref(o);
+}
+
+void SinkInputWidget::setTitle(const char* title) {
+  sinkInputName->setText(title);
 }

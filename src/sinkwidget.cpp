@@ -32,34 +32,12 @@ void SinkWidget::update(const pa_sink_info &info) {
   sinkName->setText(info.description);
 }
 
-void SinkWidget::updateSinkInput(const pa_sink_input_info &info) {
-  SinkInputWidget* sinkInput;
-  if (sinkInputs.count(info.index)) {
-    sinkInput = sinkInputs[info.index];
-    if (sinkInput->sink == index) {
-      sinkInput->update(info);
-    } else {
-      std::cout << "Remove sinkInput from " << index << std::endl;
-      sinkInputLayout->removeWidget(sinkInput);
-      delete sinkInput;
-      sinkInputs.erase(info.index);
-    }
-  } else if (info.sink == index){
-    sinkInput = new SinkInputWidget();
+void SinkWidget::addSinkInput(SinkInputWidget* sinkInput) {
     sinkInputLayout->addWidget(sinkInput);
-    sinkInputs[info.index] = sinkInput;
-    sinkInput->update(info);
-  }
 }
 
-void SinkWidget::removeSinkInput(uint32_t index) {
-  if (sinkInputs.count(index)) {
-    std::cout << "Will remonve input with index : " << index << std::endl;
-    SinkInputWidget* sinkInput = sinkInputs[index];
+void SinkWidget::removeSinkInput(SinkInputWidget* sinkInput) {
     sinkInputLayout->removeWidget(sinkInput);
-    delete sinkInput;
-    sinkInputs.erase(index);
-  }
 }
 
 void SinkWidget::updateVolumeAction(int value) {
