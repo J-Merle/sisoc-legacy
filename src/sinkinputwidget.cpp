@@ -22,7 +22,10 @@ void SinkInputWidget::update(const pa_sink_input_info &info) {
   client = info.client;
   sink = info.sink;
   volume = info.volume;
-  mainSlider->setValue(pa_cvolume_max(&(info.volume)));
+  int sliderValue = pa_cvolume_max(&volume);
+  if(sliderValue != mainSlider->value()) {
+    mainSlider->setValue(sliderValue);
+  }
 }
 
 void SinkInputWidget::updateVolumeAction(int value) {

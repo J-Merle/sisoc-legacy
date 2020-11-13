@@ -5,8 +5,8 @@
 #include <iostream>
 
 MainWindow::MainWindow() {
-  QHBoxLayout* layout = new QHBoxLayout();
-  this->setLayout(layout);
+  sinkLayout = new QHBoxLayout();
+  this->setLayout(sinkLayout);
 }
 
 
@@ -14,7 +14,6 @@ MainWindow::~MainWindow() {}
 
 
 void MainWindow::updateCard(const pa_card_info &info) {
-  std::cout << info.name << std::endl;
 }
 
 void MainWindow::updateSink(const pa_sink_info &info) {
@@ -29,6 +28,15 @@ void MainWindow::updateSink(const pa_sink_info &info) {
   slider->update(info);
 }
 
+void MainWindow::removeSink(uint32_t index) {
+  if(sinks.count(index)) {
+    SinkWidget* sink = sinks[index];
+    sinkLayout->removeWidget(sink);
+    sinks.erase(index);
+    delete sink;
+  }
+}
+
 void MainWindow::updateSinkInput(const pa_sink_input_info &info) {
   SinkInputWidget* sinkInput;
   if (sinkInputs.count(info.index)) {
@@ -37,10 +45,17 @@ void MainWindow::updateSinkInput(const pa_sink_input_info &info) {
     if (sinkInput->sink == info.sink) {
       sinkInput->update(info);
     } else {
-      sinks[sinkInput->sink]->removeSinkInput(sinkInput);
+      // The sink input does not belong to the same sink
+      // If the sink still exist then the input should be removed
+      if (sinks.count(sinkInput->sink)) {
+        sinks[sinkInput->sink]->removeSinkInput(sinkInput);
+      } else {
+        // If the old sink has been removed we must init a new SinkInputWidget
+        sinkInputs[info.index] = new SinkInputWidget();
+        sinkInput = sinkInputs[info.index];
+      }
+      sinks[info.sink]->addSinkInput(sinkInput);
       sinkInput->update(info);
-      sinks[sinkInput->sink]->addSinkInput(sinkInput);
-
     }
 
   } else {
@@ -48,10 +63,7 @@ void MainWindow::updateSinkInput(const pa_sink_input_info &info) {
     sinkInput->update(info);
     sinkInput->setTitle(clients[info.client]);
     sinkInputs[info.index] = sinkInput;
-    sinks[sinkInput->sink]->addSinkInput(sinkInput);
-    for(auto & client : clients) {
-      std::cout << client.first << " " << client.second << std::endl;
-    }
+    sinks[info.sink]->addSinkInput(sinkInput);
   }
 }
 
@@ -65,8 +77,7 @@ void MainWindow::removeSinkInput(uint32_t index) {
 }
 
 void MainWindow::updateClient(const pa_client_info &info) {
-  std::cout << "Client : " << info.name << std::endl;
-  clients[info.index] = info.name;
+  clients[info.index] = qstrdup(info.name);
   for (auto & sinkInputWidget : sinkInputs) {
     SinkInputWidget *w = sinkInputWidget.second;
     if (w->client == info.index) {

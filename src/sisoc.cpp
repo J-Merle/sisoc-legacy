@@ -99,20 +99,17 @@ void client_cb(pa_context *, const pa_client_info *i, int eol, void *userdata) {
         return;
     }
 
-    std::cout << "Client cb" << std::endl;
-
-    std::cout << i->name << std::endl;
     w->updateClient(*i);
 }
 
 void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index, void *userdata) {
   MainWindow *w = static_cast<MainWindow*>(userdata);
-  pa_operation *o;
 
   // Find out which kind of event occured
   switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
     case PA_SUBSCRIPTION_EVENT_CARD:
       if (!(t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
+        pa_operation *o;
         if (!(o = pa_context_get_card_info_by_index(c, index, card_cb, w))) {
           show_error(QObject::tr("pa_context_get_card_info_by_index() failed").toUtf8().constData());
           return;
@@ -121,18 +118,23 @@ void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index,
       }
       break;
     case PA_SUBSCRIPTION_EVENT_SINK :
-      if (!(o = pa_context_get_sink_info_by_index(c, index, sink_cb, w))) {
-        show_error(QObject::tr("pa_context_get_sink_info_by_index() failed").toUtf8().constData());
-        return;
+      if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
+        w->removeSink(index);
+      } else {
+        pa_operation *o;
+        if (!(o = pa_context_get_sink_info_by_index(c, index, sink_cb, w))) {
+          show_error(QObject::tr("pa_context_get_sink_info_by_index() failed").toUtf8().constData());
+          return;
+        }
+        pa_operation_unref(o);
       }
-      pa_operation_unref(o);
       break;
     case PA_SUBSCRIPTION_EVENT_SINK_INPUT:
       if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
-        std::cout << "Delete event" << std::endl;
         w->removeSinkInput(index);
       }
       else {
+        pa_operation *o;
         if (!(o = pa_context_get_sink_input_info(c, index, sink_input_cb, w))) {
           show_error(QObject::tr("pa_context_get_sink_info_by_index() failed").toUtf8().constData());
           return;
@@ -141,6 +143,7 @@ void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index,
       }
       break;
     case PA_SUBSCRIPTION_EVENT_CLIENT :
+      pa_operation *o;
       if (!(o = pa_context_get_client_info(c, index, client_cb, w))) {
         show_error(QObject::tr("pa_context_get_client_info() failed").toUtf8().constData());
         return;
