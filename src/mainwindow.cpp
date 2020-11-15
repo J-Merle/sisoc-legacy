@@ -54,6 +54,7 @@ void MainWindow::updateSinkInput(const pa_sink_input_info &info) {
         sinkInputs[info.index] = new SinkInputWidget();
         sinkInput = sinkInputs[info.index];
       }
+      sinkInput->setTitle(clients[info.client]);
       sinks[info.sink]->addSinkInput(sinkInput);
       sinkInput->update(info);
     }

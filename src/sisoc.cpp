@@ -98,7 +98,6 @@ void client_cb(pa_context *, const pa_client_info *i, int eol, void *userdata) {
         if (eol > 0) {
         return;
     }
-
     w->updateClient(*i);
 }
 
@@ -174,7 +173,8 @@ void context_state_callback(pa_context *c, void *userdata) {
             if (!(o = pa_context_subscribe(c,
                                            (pa_subscription_mask_t)(PA_SUBSCRIPTION_MASK_CARD |
                                              PA_SUBSCRIPTION_MASK_SINK |
-                                             PA_SUBSCRIPTION_MASK_SINK_INPUT
+                                             PA_SUBSCRIPTION_MASK_SINK_INPUT |
+                                             PA_SUBSCRIPTION_MASK_CLIENT
                                              ),
                                            nullptr,
                                            nullptr))) {
