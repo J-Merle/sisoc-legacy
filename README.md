@@ -21,3 +21,8 @@ cd build
 cmake ..
 make
 ```
+
+## Install
+After building the project, you can simply run `make install` as super user.
+
+Sisoc is now installed and you can use it with the `sisoc` command.
