@@ -33,24 +33,6 @@ int main(int argc, char *argv[]) {
     return app.exec();
 }
 
-void card_cb(pa_context *, const pa_card_info *i, int eol, void *userdata) {
-    MainWindow *w = static_cast<MainWindow*>(userdata);
-
-    if (eol < 0) {
-        if (pa_context_errno(context) == PA_ERR_NOENTITY)
-            return;
-
-        show_error(QObject::tr("Card callback failure").toUtf8().constData());
-        return;
-    }
-        if (eol > 0) {
-        return;
-    }
-
-
-    w->updateCard(*i);
-}
-
 void sink_cb(pa_context *, const pa_sink_info *i, int eol, void *userdata) {
     MainWindow *w = static_cast<MainWindow*>(userdata);
 
@@ -106,16 +88,6 @@ void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index,
 
   // Find out which kind of event occured
   switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
-    case PA_SUBSCRIPTION_EVENT_CARD:
-      if (!(t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
-        pa_operation *o;
-        if (!(o = pa_context_get_card_info_by_index(c, index, card_cb, w))) {
-          show_error(QObject::tr("pa_context_get_card_info_by_index() failed").toUtf8().constData());
-          return;
-        }
-        pa_operation_unref(o);
-      }
-      break;
     case PA_SUBSCRIPTION_EVENT_SINK :
       if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
         w->removeSink(index);
@@ -171,8 +143,7 @@ void context_state_callback(pa_context *c, void *userdata) {
             pa_context_set_subscribe_callback(c, subscribe_cb, w);
 
             if (!(o = pa_context_subscribe(c,
-                                           (pa_subscription_mask_t)(PA_SUBSCRIPTION_MASK_CARD |
-                                             PA_SUBSCRIPTION_MASK_SINK |
+                                           (pa_subscription_mask_t)(PA_SUBSCRIPTION_MASK_SINK |
                                              PA_SUBSCRIPTION_MASK_SINK_INPUT |
                                              PA_SUBSCRIPTION_MASK_CLIENT
                                              ),
@@ -186,12 +157,6 @@ void context_state_callback(pa_context *c, void *userdata) {
 
 
             // Retrieve once the desired informations because cb are no triggered on connection
-            if (!(o = pa_context_get_card_info_list(c, card_cb, w))) {
-                show_error(QObject::tr("pa_context_get_card_info_list() failed").toUtf8().constData());
-                return;
-            }
-            pa_operation_unref(o);
-
             if (!(o = pa_context_get_sink_info_list(c, sink_cb, w))) {
                 show_error(QObject::tr("pa_context_get_sink_info_list() failed").toUtf8().constData());
                 return;

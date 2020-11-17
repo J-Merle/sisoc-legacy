@@ -12,10 +12,6 @@ MainWindow::MainWindow() {
 
 MainWindow::~MainWindow() {}
 
-
-void MainWindow::updateCard(const pa_card_info &info) {
-}
-
 void MainWindow::updateSink(const pa_sink_info &info) {
   SinkWidget* slider;
   if (sinks.count(info.index)) {

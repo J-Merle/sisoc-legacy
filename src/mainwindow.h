@@ -13,7 +13,6 @@ class MainWindow : public QWidget {
   public:
     MainWindow();
     virtual ~MainWindow();
-    void updateCard(const pa_card_info &info);
     void updateSink(const pa_sink_info &info);
     void removeSink(uint32_t index);
     void updateSinkInput(const pa_sink_input_info &info);
