@@ -3,6 +3,7 @@
 #include <pulse/pulseaudio.h>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QGridLayout>
 #include <QWidget>
 #include <QSlider>
 #include <QLabel>
@@ -18,11 +19,13 @@ class SinkWidget : public QWidget {
     void addSinkInput(SinkInputWidget* sinkInput);
     void removeSinkInput(SinkInputWidget* sinkInput);
 
-    pa_cvolume volume;
-    uint32_t index;
-    QSlider* mainSlider;
-    QVBoxLayout* vlayout;
+  private:
+    QGridLayout* mainLayout;
     QHBoxLayout* sinkInputLayout;
     QLabel* sinkName;
+    QSlider* mainSlider;
+    pa_cvolume volume;
+    int muted;
+    uint32_t index;
 };
 #endif  // SRC_SINKWIDGET_H_
