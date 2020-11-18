@@ -13,9 +13,11 @@ SinkWidget::SinkWidget() {
   mainLayout->addLayout(sinkInputLayout, 1, 1, 1, 1);
   this->setLayout(mainLayout);
 
+  setAcceptDrops(true);
 
   connect(mainSlider, &QSlider::valueChanged, this, &SinkWidget::updateVolumeAction);
 }
+
 SinkWidget::~SinkWidget() {}
 
 void SinkWidget::update(const pa_sink_info &info) {
@@ -50,4 +52,19 @@ void SinkWidget::updateVolumeAction(int value) {
   }
 
   pa_operation_unref(o);
+}
+
+void SinkWidget::dropEvent(QDropEvent *event) {
+  SinkInputWidget *w = static_cast<SinkInputWidget*>(event->source());
+  if (!w)
+    return;
+  pa_operation* o;
+  if (!(o = pa_context_move_sink_input_by_index(get_context(), w->index, index, nullptr, nullptr))) {
+    // TODO handle error properly
+  }
+  pa_operation_unref(o);
+}
+
+void SinkWidget::dragEnterEvent(QDragEnterEvent *event) {
+  event->acceptProposedAction();
 }

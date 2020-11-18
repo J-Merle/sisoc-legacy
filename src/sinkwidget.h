@@ -1,12 +1,14 @@
 #ifndef SRC_SINKWIDGET_H_
 #define SRC_SINKWIDGET_H_
-#include <pulse/pulseaudio.h>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 #include <QGridLayout>
-#include <QWidget>
-#include <QSlider>
+#include <QHBoxLayout>
 #include <QLabel>
+#include <QSlider>
+#include <QVBoxLayout>
+#include <QWidget>
+#include <pulse/pulseaudio.h>
 #include "sinkinputwidget.h"
 
 class SinkWidget : public QWidget {
@@ -27,5 +29,9 @@ class SinkWidget : public QWidget {
     pa_cvolume volume;
     int muted;
     uint32_t index;
+
+  protected:
+    void dropEvent(QDropEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event);
 };
 #endif  // SRC_SINKWIDGET_H_

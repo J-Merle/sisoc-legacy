@@ -2,6 +2,8 @@
 #include "sisoc.h"
 #include <QVBoxLayout>
 #include <QSlider>
+#include <QDrag>
+#include <QMimeData>
 #include <iostream>
 
 SinkInputWidget::SinkInputWidget() {
@@ -23,7 +25,7 @@ void SinkInputWidget::update(const pa_sink_input_info &info) {
   sink = info.sink;
   volume = info.volume;
   int sliderValue = pa_cvolume_max(&volume);
-  if(sliderValue != mainSlider->value()) {
+  if (sliderValue != mainSlider->value()) {
     mainSlider->setValue(sliderValue);
   }
 }
@@ -43,3 +45,17 @@ void SinkInputWidget::updateVolumeAction(int value) {
 void SinkInputWidget::setTitle(const char* title) {
   sinkInputName->setText(title);
 }
+
+void SinkInputWidget::mousePressEvent(QMouseEvent *event) {
+  if (event->button() == Qt::LeftButton
+      && sinkInputName->geometry().contains(event->pos())) {
+    QDrag *drag = new QDrag(this);
+    QMimeData *mimeData = new QMimeData;
+
+    mimeData->setText(sinkInputName->text());
+    drag->setMimeData(mimeData);
+
+    drag->exec();
+  }
+}
+
