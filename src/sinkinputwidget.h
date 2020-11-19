@@ -2,6 +2,7 @@
 #ifndef SRC_SINKINPUTWIDGET_H_
 #define SRC_SINKINPUTWIDGET_H_
 #include <pulse/pulseaudio.h>
+#include <QPushButton>
 #include <QLabel>
 #include <QMouseEvent>
 #include <QSlider>
@@ -20,11 +21,16 @@ class SinkInputWidget : public QWidget {
     uint32_t sink;
     uint32_t client;
     QSlider* mainSlider;
+    QPushButton* muteButton;
 
   private:
     QLabel* sinkInputName;
+    int muted;
+
+    void toggleMute();
 
   protected:
     void mousePressEvent(QMouseEvent* event);
 };
 #endif  // SRC_SINKINPUTWIDGET_H_
+
