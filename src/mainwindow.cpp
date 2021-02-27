@@ -6,6 +6,7 @@
 
 MainWindow::MainWindow() {
   sinkLayout = new QHBoxLayout();
+  sinkLayout->setSpacing(20);
   this->setLayout(sinkLayout);
 }
 

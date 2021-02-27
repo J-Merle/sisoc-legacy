@@ -8,15 +8,16 @@
 
 SinkInputWidget::SinkInputWidget() {
   QVBoxLayout* layout = new QVBoxLayout();
+  layout->setAlignment(Qt::AlignBottom);
   mainSlider = new QSlider(this);
   mainSlider->setMinimumHeight(150);
   mainSlider->setMaximum(PA_VOLUME_NORM);
   sinkInputName = new QLabel(this);
   muteButton = new QPushButton(this);
 
-  layout->addWidget(muteButton);
   layout->addWidget(mainSlider);
   layout->addWidget(sinkInputName);
+  layout->addWidget(muteButton);
   layout->setAlignment(mainSlider, Qt::AlignCenter);
   layout->setAlignment(muteButton, Qt::AlignCenter);
   layout->setAlignment(sinkInputName, Qt::AlignCenter);
@@ -36,12 +37,11 @@ void SinkInputWidget::update(const pa_sink_input_info &info) {
   volume = info.volume;
   muted = info.mute;
 
+  mainSlider->setEnabled(!muted);
   if (muted) {
-    muteButton->setText("Unmute");
-    this->setStyleSheet("background-color: grey");
+    muteButton->setIcon(QIcon::fromTheme("audio-volume-muted"));
   } else {
-    muteButton->setText("Mute");
-    this->setStyleSheet("");
+    muteButton->setIcon(QIcon::fromTheme("audio-volume-high"));
   }
 
   int sliderValue = pa_cvolume_max(&volume);

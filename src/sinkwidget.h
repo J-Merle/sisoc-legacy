@@ -8,6 +8,8 @@
 #include <QSlider>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QLayout>
+#include <QFrame>
 #include <pulse/pulseaudio.h>
 #include "sinkinputwidget.h"
 
@@ -22,7 +24,10 @@ class SinkWidget : public QWidget {
     void removeSinkInput(SinkInputWidget* sinkInput);
 
   private:
-    QGridLayout* mainLayout;
+    QVBoxLayout* mainLayout;
+    QHBoxLayout* header;
+    QHBoxLayout* content;
+    QFrame *separator;
     QHBoxLayout* sinkInputLayout;
     QLabel* sinkName;
     QSlider* mainSlider;

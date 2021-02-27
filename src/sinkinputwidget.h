@@ -7,6 +7,7 @@
 #include <QMouseEvent>
 #include <QSlider>
 #include <QWidget>
+#include <QIcon>
 
 class SinkInputWidget : public QWidget {
   public:
