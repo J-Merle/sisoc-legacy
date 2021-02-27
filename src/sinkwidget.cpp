@@ -3,14 +3,31 @@
 #include <iostream>
 
 SinkWidget::SinkWidget() {
-  mainLayout = new QGridLayout();
+  mainLayout = new QVBoxLayout();
+  
+  header = new QHBoxLayout();
+  sinkName = new QLabel();
+  header->addWidget(sinkName);
+  mainLayout->addLayout(header);
+
+  separator = new QFrame();
+  separator->setObjectName(QString::fromUtf8("line"));
+  separator->setGeometry(QRect(0, 0, 2, 100));
+  separator->setFrameShape(QFrame::VLine);
+
+  content = new QHBoxLayout();
+  content->setAlignment(Qt::AlignLeft);
+  content->setSpacing(20);
+  content->setSizeConstraint(QLayout::SetMaximumSize);
   mainSlider = new QSlider();
   mainSlider->setMinimumHeight(200);
-  sinkName = new QLabel();
   sinkInputLayout = new QHBoxLayout();
-  mainLayout->addWidget(mainSlider, 0, 0, 2, 1);
-  mainLayout->addWidget(sinkName, 0, 1, 1, 1);
-  mainLayout->addLayout(sinkInputLayout, 1, 1, 1, 1);
+  sinkInputLayout->setSpacing(10);
+  content->addWidget(mainSlider);
+  content->addWidget(separator);
+  //mainLayout->addWidget(sinkName, 0, 1, 1, 1);
+  content->addLayout(sinkInputLayout);
+  mainLayout->addLayout(content);
   this->setLayout(mainLayout);
 
   setAcceptDrops(true);
