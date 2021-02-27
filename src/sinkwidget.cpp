@@ -25,7 +25,6 @@ SinkWidget::SinkWidget() {
   sinkInputLayout->setSpacing(10);
   content->addWidget(mainSlider);
   content->addWidget(separator);
-  //mainLayout->addWidget(sinkName, 0, 1, 1, 1);
   content->addLayout(sinkInputLayout);
   mainLayout->addLayout(content);
   this->setLayout(mainLayout);

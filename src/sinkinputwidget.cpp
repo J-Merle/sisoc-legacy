@@ -40,10 +40,8 @@ void SinkInputWidget::update(const pa_sink_input_info &info) {
   mainSlider->setEnabled(!muted);
   if (muted) {
     muteButton->setIcon(QIcon::fromTheme("audio-volume-muted"));
-    //this->setStyleSheet("background-color: grey");
   } else {
     muteButton->setIcon(QIcon::fromTheme("audio-volume-high"));
-    //this->setStyleSheet("");
   }
 
   int sliderValue = pa_cvolume_max(&volume);
